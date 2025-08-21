@@ -1,0 +1,42 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  margin: 0;
+  background: rgb(33,33,33);
+}
+
+/* 美化 Markdown 表格 - 暗色系配色 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 14px;
+  text-align: left;
+  color: #e0e0e0; /* 文字顏色為淺灰 */
+}
+
+table thead {
+  background-color: #222; /* 標題行背景為深灰 */
+}
+
+table th,
+table td {
+  border: 1px solid #444; /* 邊框顏色為中灰 */
+  padding: 8px;
+}
+
+table tr:nth-child(even) {
+  background-color: #333; /* 偶數行背景為暗灰 */
+}
+
+table tr:nth-child(odd) {
+  background-color: #222; /* 奇數行背景為更深的灰 */
+}
+
+table tr:hover {
+  background-color: #444; /* 滑鼠懸停行背景為淺灰 */
+}
+
+table th {
+  color: #fff; /* 標題文字顏色為白色 */
+}
+

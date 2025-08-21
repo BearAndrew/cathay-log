@@ -1,0 +1,12 @@
+{
+  "/web-log": {
+    "target": "http://localhost:9000",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/api/infer": {
+    "target": "http://localhost:9000",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

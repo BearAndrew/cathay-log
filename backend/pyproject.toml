@@ -1,0 +1,20 @@
+[project]
+name = "cathay-log"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dspy>=3.0.0",
+    "fastapi>=0.116.1",
+    "fastmcp>=2.11.1",
+    "grandalf>=0.8",
+    "graphviz>=0.21",
+    "langchain-google-genai>=2.1.9",
+    "langchain-mcp-adapters>=0.1.9",
+    "langchain-openai>=0.3.28",
+    "langgraph>=0.6.3",
+    "langserve>=0.3.1",
+    "mcp[cli]>=1.12.3",
+    "uvicorn>=0.35.0",
+]

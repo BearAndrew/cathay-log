@@ -1,0 +1,3 @@
+curl -X POST http://localhost:9000/web-log/invoke \
+  -H "Content-Type: application/json" \
+  -d '{"input": "讀取14/Jul/2025:00:00:00 到 14/Jul/2025:23:59:59 log並找出404, 分析完後告訴我該注意什麼"}'
