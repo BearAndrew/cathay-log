@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 export interface AgentRequest {
   input: string;
@@ -31,17 +32,18 @@ export interface InferResponse {
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = '/web-log/invoke';
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
   invokeAgent(input: string): Observable<AgentResponse> {
+    const url = `${this.baseUrl}/web-log/invoke`;
     const body: AgentRequest = { input };
-    return this.http.post<AgentResponse>(this.apiUrl, body);
+    return this.http.post<AgentResponse>(url, body);
   }
 
   queryLog(input: string): Observable<InferResponse> {
-    const url = '/api/infer';
+    const url = `${this.baseUrl}/api/infer`;
 
     // 取得或產生 session_id
     let session_id = localStorage.getItem('session_id');
