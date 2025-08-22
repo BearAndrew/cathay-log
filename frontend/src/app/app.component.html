@@ -1,6 +1,6 @@
 <div class="chat-container">
   <div class="message-area">
-    <div style="margin: auto; padding-right: 32px; max-width: 768px">
+    <div style="margin: auto; padding-right: 32px; padding-bottom: 100px; max-width: 768px">
       <!-- 顯示訊息區域，允許滾動 -->
       <div
         *ngFor="let message of queryLogResponse; let i = index"
@@ -26,6 +26,9 @@
         [(ngModel)]="userInput"
         placeholder="輸入訊息..."
         [disabled]="loading"
+        (keydown.enter)="handleEnter()"
+        (compositionstart)="isComposing = true"
+        (compositionend)="onCompositionEnd()"
       />
       <button *ngIf="userInput" (click)="queryLog()" [disabled]="loading">
         <svg

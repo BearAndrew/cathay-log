@@ -1,7 +1,11 @@
 from datetime import datetime
 import re
+import os
 
-LOG_PATH = "/Users/bear/工作/Python/cathay-log/backend/app/data/access_log_part2.log" 
+
+# 自動取得 log 檔的絕對路徑
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_PATH = os.path.join(BASE_DIR, "../data/access_log_part2.log")
 
 def filter_logs_by_time_and_status(start_time: str, end_time: str, status_code: str):
     """

@@ -12,11 +12,33 @@ import { MarkdownModule } from 'ngx-markdown';
 })
 export class AppComponent {
   userInput = '';
-  queryLogResponse: { role: string, content: string }[] = [];
+  queryLogResponse: { role: string; content: string }[] = [];
   loading: boolean = false;
+
+  isComposing: boolean = false;
+  canSubmit: boolean = true;
+  private imeTimeout: any = null;
 
   constructor(private apiService: ApiService) {}
 
+  onCompositionEnd() {
+    this.isComposing = false;
+
+    // 結束輸入後，延遲 50ms 才允許送出
+    this.canSubmit = false;
+    clearTimeout(this.imeTimeout);
+    this.imeTimeout = setTimeout(() => {
+      this.canSubmit = true;
+    }, 50);
+  }
+
+  handleEnter() {
+    if (this.isComposing || !this.canSubmit || this.loading) {
+      return; // 還在輸入或 loading 狀態，不送出
+    }
+
+    this.queryLog();
+  }
   queryLog() {
     if (this.userInput.trim() === '') return; // 不處理空輸入
 
@@ -45,10 +67,12 @@ export class AppComponent {
       },
       error: (err) => {
         // 錯誤時顯示錯誤訊息
-        this.queryLogResponse.push({ role: 'assistant', content: '發送請求失敗：' + (err?.message || '') });
+        this.queryLogResponse.push({
+          role: 'assistant',
+          content: '發送請求失敗：' + (err?.message || ''),
+        });
         this.loading = false;
       },
     });
   }
-
 }

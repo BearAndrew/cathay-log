@@ -32,6 +32,11 @@ curl -X POST http://localhost:9000/web-log/invoke \
 
 
 
+ curl -X OPTIONS https://cathay-log.onrender.com/api/infer \
+  -H "Origin: https://thriving-alfajores-e1c9ee.netlify.app" \
+  -H "Access-Control-Request-Method: POST" \
+  -H "Access-Control-Request-Headers: content-type" \
+  -i
 
 
 
