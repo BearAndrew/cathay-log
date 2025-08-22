@@ -1,6 +1,7 @@
 from typing import Dict
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from app.web_log.api import router as web_log_router
@@ -31,6 +32,19 @@ class UserInput(BaseModel):
     session_id: str
 
 session_states: Dict[str, dict] = {}
+
+
+@app.options("/api/infer")
+async def preflight_handler(request: Request):
+    return JSONResponse(
+        content={"message": "CORS preflight OK"},
+        status_code=200,
+        headers={
+            "Access-Control-Allow-Origin": request.headers.get("origin") or "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": request.headers.get("Access-Control-Request-Headers", "*"),
+        },
+    )
 
 @app.post("/api/infer")
 async def run_graph_with_simple_input(user_input: UserInput):
