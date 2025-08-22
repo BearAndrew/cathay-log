@@ -33,6 +33,8 @@ export interface InferResponse {
 })
 export class ApiService {
   private baseUrl = environment.apiUrl;
+  session_id = Date.now().toString();
+
 
   constructor(private http: HttpClient) {}
 
@@ -45,11 +47,9 @@ export class ApiService {
   queryLog(input: string): Observable<InferResponse> {
     const url = `${this.baseUrl}/api/infer`;
 
-    let session_id = Date.now().toString();
-
     const body = {
       input,
-      session_id,
+      session_id: this.session_id,
     };
 
     return this.http.post<InferResponse>(url, body);
