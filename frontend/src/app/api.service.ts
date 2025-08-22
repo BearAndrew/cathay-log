@@ -45,12 +45,7 @@ export class ApiService {
   queryLog(input: string): Observable<InferResponse> {
     const url = `${this.baseUrl}/api/infer`;
 
-    // 取得或產生 session_id
-    let session_id = localStorage.getItem('session_id');
-    if (!session_id) {
-      session_id = Date.now().toString(); // 或用 UUID
-      localStorage.setItem('session_id', session_id);
-    }
+    let session_id = Date.now().toString();
 
     const body = {
       input,
