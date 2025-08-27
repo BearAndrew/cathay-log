@@ -7,7 +7,7 @@ from collections import defaultdict, Counter
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_PATH = os.path.join(BASE_DIR, "../data/access_log_part2.log")
 
-def filter_logs_by_time_and_status(start_time: str, end_time: str, status_code: str,
+def filter_logs_by_time_and_status(start_time: str, end_time: str, status_code: str = None,
                                    http_method: str = None, source_ip: str = None):
     """
     回傳：
@@ -23,10 +23,34 @@ def filter_logs_by_time_and_status(start_time: str, end_time: str, status_code: 
         print("時間格式錯誤")
         return "", [], {}
 
+    # 永遠排除 2xx 狀態碼
+    exclude_2xx = re.compile(r"^(?!2\d\d$)")
+
+    # 編譯 status_code 正規表達式
     try:
-        status_code = int(status_code)
-    except ValueError:
-        print(f"無效的狀態碼：{status_code}")
+        if status_code:
+            user_status_pattern = re.compile(status_code)
+            def combined_status_filter(code_str):
+                return exclude_2xx.match(code_str) and user_status_pattern.match(code_str)
+        else:
+            def combined_status_filter(code_str):
+                return exclude_2xx.match(code_str)
+    except re.error:
+        print(f"無效的 status_code 正規表達式：{status_code}")
+        return "", [], {}
+
+    # 編譯 http_method 正規表達式
+    try:
+        http_method_pattern = re.compile(http_method) if http_method else None
+    except re.error:
+        print(f"無效的 http_method 正規表達式：{http_method}")
+        return "", [], {}
+
+    # 編譯 source_ip 正規表達式
+    try:
+        source_ip_pattern = re.compile(source_ip) if source_ip else None
+    except re.error:
+        print(f"無效的 source_ip 正規表達式：{source_ip}")
         return "", [], {}
 
     filtered_logs = []
@@ -64,22 +88,23 @@ def filter_logs_by_time_and_status(start_time: str, end_time: str, status_code: 
                 except ValueError:
                     continue
 
+                # 條件過濾
                 if not (start_dt <= log_dt <= end_dt):
                     continue
-                if log_status != status_code:
+                if not combined_status_filter(str(log_status)):
                     continue
-                if http_method and method != http_method.upper():
+                if http_method_pattern and not http_method_pattern.match(method):
                     continue
-                if source_ip and real_ip != source_ip:
+                if source_ip_pattern and not source_ip_pattern.match(real_ip):
                     continue
 
                 filtered_logs.append(line.strip())
 
-                # 結構化資料儲存
                 structured_body.append({
                     "timestamp": timestamp_str,
                     "resource": resource,
                     "source_ip": real_ip,
+                    "http_method": method,
                     "status_code": log_status
                 })
 
@@ -94,7 +119,7 @@ def filter_logs_by_time_and_status(start_time: str, end_time: str, status_code: 
         print(f"讀取 log 時發生錯誤：{e}")
         return "", [], {}
 
-    # 統計資訊
+    # 統計資訊文字
     stats_summary = []
 
     stats_summary.append("📊 前 10 名請求次數最多的 IP：")
@@ -107,17 +132,18 @@ def filter_logs_by_time_and_status(start_time: str, end_time: str, status_code: 
     for resource, count in resource_counter.most_common(10):
         stats_summary.append(f"- 資源：{resource} | 請求次數：{count}")
 
-    # 建立結構化資料格式
+    # 結構化資料格式（僅前 100 筆）
     structured_table = {
         "type": "table",
         "data": {
             "headers": [
-                { "key": "timestamp", "label": "時間" },
-                { "key": "resource", "label": "請求資源" },
-                { "key": "source_ip", "label": "來源 IP" },
-                { "key": "status_code", "label": "狀態碼" }
+                {"key": "timestamp", "label": "時間"},
+                {"key": "resource", "label": "請求資源"},
+                {"key": "source_ip", "label": "來源 IP"},
+                {"key": "http_method", "label": "HTTP 方法"},
+                {"key": "status_code", "label": "狀態碼"},
             ],
-            "body": structured_body
+            "body": structured_body[:100]
         }
     }
 
