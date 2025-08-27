@@ -54,21 +54,30 @@ async def run_graph_with_simple_input(user_input: UserInput):
     if session_id not in session_states:
         session_states[session_id] = {
             "messages": [],
-            "tool_output": ""
         }
 
     current_state = {
         "messages": [
             {"role": "user", "content": user_input.input}
-        ],
-        "tool_output": session_states[session_id]["tool_output"]
+        ]
     }
 
     result = langgraph_app.invoke(current_state, config={"thread_id": session_id})
 
+    # 更新 session 狀態（儲存完整訊息）
     session_states[session_id]["messages"] = result["messages"]
-
     if "tool_output" in result:
         session_states[session_id]["tool_output"] = result["tool_output"]
+    if "tool_detail" in result:
+        session_states[session_id]["tool_detail"] = result["tool_detail"]
 
-    return result
+    # 回傳只有最後一則訊息與其他資料
+    response = {
+        "message": result["messages"][-1]
+    }
+    if "tool_output" in result:
+        response["tool_output"] = result["tool_output"]
+    if "tool_detail" in result:
+        response["tool_detail"] = result["tool_detail"]
+
+    return response

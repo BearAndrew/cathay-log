@@ -21,12 +21,12 @@ python server.py
 uv run mcp dev server.py
 
 啟動後端服務 fastapi
-uvicorn app.main:app --reload --port 9000
+uvicorn app.main:app --reload --port 8000
 
 
 
 測試API
-curl -X POST http://localhost:9000/web-log/invoke \
+curl -X POST http://localhost:8000/web-log/invoke \
   -H "Content-Type: application/json" \
   -d '{"input": "請幫我計算 5 + 5"}'
 

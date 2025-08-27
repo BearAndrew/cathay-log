@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AgentResponse, ApiService, InferResponse } from './api.service';
+import { AgentResponse, ApiService, InferResponse, Message } from './api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MarkdownModule } from 'ngx-markdown';
@@ -12,7 +12,7 @@ import { MarkdownModule } from 'ngx-markdown';
 })
 export class AppComponent {
   userInput = '';
-  queryLogResponse: { role: string; content: string }[] = [];
+  queryLogResponse: Message[] = [];
   loading: boolean = false;
 
   isComposing: boolean = false;
@@ -57,10 +57,7 @@ export class AppComponent {
     this.apiService.queryLog(input).subscribe({
       next: (res) => {
         // 將 API 回應的訊息加入
-        // res.messages.forEach((message) => {
-        //   this.queryLogResponse.push(message);
-        // });
-        this.queryLogResponse = res.messages;
+        this.queryLogResponse.push({ role: res.message.role, content: res.message.content, tool_detail: res.tool_detail });
 
         // 關閉 loading 狀態
         this.loading = false;

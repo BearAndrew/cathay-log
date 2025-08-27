@@ -14,8 +14,9 @@ table {
   color: #e0e0e0; /* 文字顏色為淺灰 */
 }
 
-table thead {
-  background-color: #222; /* 標題行背景為深灰 */
+table thead > tr > th {
+  background-color: #1c1c1c; /* 標題行背景為深灰 */
+  font-weight: bold;
 }
 
 table th,

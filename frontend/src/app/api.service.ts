@@ -25,7 +25,25 @@ export interface AgentResponse {
 }
 
 export interface InferResponse {
-  messages: { role: string; content: string }[];
+  message: Message;
+  tool_output: string;
+  tool_detail: ToolDetail;
+}
+
+export interface Message {
+  role: string;
+  content: string;
+  tool_detail?: ToolDetail;
+}
+
+export interface ToolDetail {
+  type: string;
+  data: ToolTableData;
+}
+
+export interface ToolTableData {
+  headers: { key: string; label: string }[];
+  body: any[];
 }
 
 @Injectable({
@@ -34,7 +52,6 @@ export interface InferResponse {
 export class ApiService {
   private baseUrl = environment.apiUrl;
   session_id = Date.now().toString();
-
 
   constructor(private http: HttpClient) {}
 

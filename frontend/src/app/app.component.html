@@ -1,6 +1,13 @@
 <div class="chat-container">
   <div class="message-area">
-    <div style="margin: auto; padding-right: 32px; padding-bottom: 100px; max-width: 768px">
+    <div
+      style="
+        margin: auto;
+        padding-right: 32px;
+        padding-bottom: 100px;
+        max-width: 768px;
+      "
+    >
       <!-- 顯示訊息區域，允許滾動 -->
       <div
         *ngFor="let message of queryLogResponse; let i = index"
@@ -11,6 +18,39 @@
         </div>
         <div class="message assistant" *ngIf="message.role === 'assistant'">
           <markdown [data]="message.content"></markdown>
+
+          <!-- 顯示工具區塊 -->
+          <details *ngIf="message.tool_detail" class="tool-section">
+            <summary>詳細資料</summary>
+
+            <!-- 如果是 table 類型資料 -->
+            <div
+              class="table-container"
+              *ngIf="message.tool_detail.type === 'table'"
+            >
+              <table class="tool-table">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of message.tool_detail.data.headers">
+                      {{ header.label }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of message.tool_detail.data.body">
+                    <td *ngFor="let header of message.tool_detail.data.headers">
+                      {{ row[header.key] }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 其他類型可自訂顯示邏輯 -->
+            <div *ngIf="message.tool_detail.type !== 'table'">
+              <pre>{{ message.tool_detail | json }}</pre>
+            </div>
+          </details>
         </div>
       </div>
 
