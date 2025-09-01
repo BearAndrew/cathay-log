@@ -7,7 +7,8 @@ body {
 /* 美化 Markdown 表格 - 暗色系配色 */
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin: 1em 0;
   font-size: 14px;
   text-align: left;
@@ -21,7 +22,7 @@ table thead > tr > th {
 
 table th,
 table td {
-  border: 1px solid #444; /* 邊框顏色為中灰 */
+  border: 0.5px solid #444; /* 邊框顏色為中灰 */
   padding: 8px;
   max-width: 200px;
 }

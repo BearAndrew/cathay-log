@@ -11,10 +11,11 @@ class ResponseSignature(dspy.Signature):
     tool_output = InputField(desc="伺服器日誌工具回傳結果")
     answer = OutputField(desc="""
         若使用者是在詢問伺服器日誌，請根據工具輸出進行回答，並提供詳細建議。
-        若不是伺服器日誌相關問題，請給出一般性自然回答。
+        若不是伺服器日誌相關問題，請給出一般性回答。
         回答必須清楚、有條理、包含技術細節（如有），並避免過度簡化。
-        將工具輸出的統計結果以表格呈現，表頭不能換行，td內多個內容要加上換行符號
-        不同統計內容要分開成多張表格""")
+        若使用者沒有要求的話，預設只整理各狀態碼出現次數統計結果，並顯示呼叫最多的一個IP與最多的一個資源。
+        統計結果以表格呈現，表頭不能換行，td內多個內容要加上換行符號。
+        不同統計內容要分開成多張表格。""")
 
 class LogQuerySignature(dspy.Signature):
     question = InputField(desc="使用者輸入的問題")

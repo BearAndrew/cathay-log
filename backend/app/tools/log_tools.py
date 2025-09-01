@@ -58,6 +58,7 @@ def filter_logs_by_time_and_status(start_time: str, end_time: str, status_code: 
 
     # 統計資料結構
     ip_counter = Counter()
+    status_counter = Counter()
     ip_to_resources = defaultdict(Counter)
     resource_counter = Counter()
 
@@ -111,6 +112,7 @@ def filter_logs_by_time_and_status(start_time: str, end_time: str, status_code: 
                 ip_counter[real_ip] += 1
                 ip_to_resources[real_ip][resource] += 1
                 resource_counter[resource] += 1
+                status_counter[log_status] += 1
 
     except FileNotFoundError:
         print(f"找不到 log 檔案：{LOG_PATH}")
@@ -131,6 +133,11 @@ def filter_logs_by_time_and_status(start_time: str, end_time: str, status_code: 
     stats_summary.append("\n📊 前 10 名被請求最多的資源：")
     for resource, count in resource_counter.most_common(10):
         stats_summary.append(f"- 資源：{resource} | 請求次數：{count}")
+        
+    stats_summary.append("\n📊 各狀態碼出現次數：")
+    for status, count in sorted(status_counter.items()):
+        stats_summary.append(f"- 狀態碼：{status} | 次數：{count}")
+
 
     # 結構化資料格式（僅前 100 筆）
     structured_table = {
