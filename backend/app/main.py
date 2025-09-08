@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from app.web_log.api import router as web_log_router
+from app.api.web_log.api import router as web_log_router
 from app.graph import app as langgraph_app
 
 app = FastAPI(title="Agent App")
