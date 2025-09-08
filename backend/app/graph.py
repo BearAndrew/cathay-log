@@ -120,9 +120,9 @@ def ip_info_tool(state: AllState) -> dict:
 
 # === 節點： 一般回應 ===
 def general_response(state: AllState) -> AllState:
-    user_input = state["messages"][-1]["content"].lower()    
+    recent_messages = state["messages"][-6:]
     general_response_generator = GeneralResponseGenerator()
-    answer = general_response_generator(question=user_input).answer
+    answer = general_response_generator(question=recent_messages).answer
 
     return {
         "messages": [{"role": "assistant", "content": answer}]

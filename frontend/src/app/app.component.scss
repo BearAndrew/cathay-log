@@ -144,7 +144,7 @@ summary {
 /* 表格寬度要 100%，避免 header 不滿版 */
 .tool-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
   margin-top: 0px;
 }
 
